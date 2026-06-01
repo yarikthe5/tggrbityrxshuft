@@ -15,7 +15,7 @@ from telegram.ext import (
 
 from db import *
 
-TOKEN = os.getenv("BOT_TOKEN")
+TOKEN = os.getenv("8914719038:AAHx5FsIGi3r8kC7SdiAtN0X1xkBLfy4CjE")
 
 # ID гілки де бот пише заявки
 REQUEST_TOPIC_ID = 123
