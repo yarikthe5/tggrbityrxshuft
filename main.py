@@ -17,10 +17,7 @@ from db import *
 
 TOKEN = os.getenv("BOT_TOKEN")
 
-# ID гілки де бот пише заявки
 REQUEST_TOPIC_ID = 123
-
-# ID гілки графіку
 SCHEDULE_TOPIC_ID = 124
 
 
@@ -47,6 +44,12 @@ async def setrole(update: Update, context):
 
 
 async def off(update: Update, context):
+    if not context.args:
+        await update.message.reply_text(
+            "Приклад: /off 2026-06-05"
+        )
+        return
+
     day = context.args[0]
 
     uid = update.effective_user.id
@@ -73,14 +76,12 @@ async def off(update: Update, context):
 
     req_id = add_request(day, uid, name, role)
 
-    keyboard = [
-        [
-            InlineKeyboardButton(
-                "✅ Прийняти",
-                callback_data=f"accept:{req_id}"
-            )
-        ]
-    ]
+    keyboard = [[
+        InlineKeyboardButton(
+            "✅ Прийняти",
+            callback_data=f"accept:{req_id}"
+        )
+    ]]
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
@@ -94,8 +95,6 @@ async def off(update: Update, context):
         ),
         reply_markup=InlineKeyboardMarkup(keyboard),
     )
-
-    await update.message.reply_text("Запит відправлено ✅")
 
 
 async def accept(update: Update, context):
@@ -150,6 +149,9 @@ async def schedule(update: Update, context):
 
 
 def main():
+    if not TOKEN:
+        raise Exception("BOT_TOKEN missing")
+
     init_db()
 
     app = (
